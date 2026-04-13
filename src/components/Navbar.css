@@ -1,0 +1,145 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(253, 246, 240, 0.95);
+  backdrop-filter: blur(10px);
+  transition: all var(--transition);
+}
+
+.navbar--scrolled {
+  box-shadow: 0 2px 20px rgba(194, 120, 158, 0.15);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  gap: 20px;
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Playfair Display", serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--rose-dark);
+  white-space: nowrap;
+}
+
+.navbar__logo-icon {
+  font-size: 1.5rem;
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+
+.navbar__links a {
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-light);
+  border-radius: 8px;
+  transition: all var(--transition);
+}
+
+.navbar__links a:hover,
+.navbar__links a.active {
+  color: var(--rose-dark);
+  background: var(--pink-light);
+}
+
+.navbar__cart {
+  position: relative;
+  background: none;
+  padding: 8px;
+  color: var(--rose-dark);
+  transition: transform var(--transition);
+}
+
+.navbar__cart:hover {
+  transform: scale(1.1);
+}
+
+.navbar__cart-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--rose-dark);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  padding: 8px;
+}
+
+.navbar__hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text-dark);
+  border-radius: 2px;
+  transition: all var(--transition);
+}
+
+.navbar__hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.navbar__hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar__hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+@media (max-width: 900px) {
+  .navbar__hamburger {
+    display: flex;
+  }
+
+  .navbar__links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    background: var(--cream);
+    padding: 80px 30px 30px;
+    gap: 4px;
+    transform: translateX(-100%);
+    transition: transform var(--transition);
+    z-index: 999;
+  }
+
+  .navbar__links--open {
+    transform: translateX(0);
+  }
+
+  .navbar__links a {
+    font-size: 1.1rem;
+    padding: 14px 20px;
+    width: 100%;
+  }
+}

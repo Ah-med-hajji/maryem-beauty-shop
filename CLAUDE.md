@@ -4,18 +4,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Maryem Beauty Shop** — an e-commerce website for a beauty/cosmetics shop. Currently in the initial setup phase with only product images in `images/`.
+Maryem Beauty Shop is a French-language beauty/cosmetics e-commerce SPA built with React 18 + React Router v6, deployed on Vercel. The site is entirely in French and targets Tunisian customers (prices in DT - Tunisian Dinar).
 
-## Current State
+## Commands
 
-- 16 product images (JPG) in `images/` — beauty/cosmetics product photos (lipsticks, lip glosses, and similar products)
-- No code, build system, or framework chosen yet
-- No git repository initialized yet
+- `npm run dev` — Start Vite dev server
+- `npm run build` — Production build to `dist/`
+- `npm run preview` — Preview production build locally
 
-## Project Assets
+## Architecture
 
-- `images/` — product photography, filenames are UUIDs (e.g., `ed21da47-e11c-4514-8590-69257acd5a1a.jpg`)
+- **Vite** as build tool with `@vitejs/plugin-react`
+- **React Router v6** handles all client-side routing (`BrowserRouter` in `src/App.jsx`)
+- **Cart state** managed via React Context (`src/context/CartContext.jsx`) with `localStorage` persistence
+- **Product data** in `src/data/products.js` — sourced from analyzing product photos in `public/images/`
+- **SEO** via `react-helmet-async` — each page sets its own `<title>` and `<meta>` tags inside the `HelmetProvider` in `src/main.jsx`
+- **Vercel SPA rewrites** configured in `vercel.json`
 
----
+## Key Files
 
-*This file will be updated as the project architecture and tooling are established.*
+- `src/main.jsx` — Entry point, wraps app in `HelmetProvider` and `CartProvider`
+- `src/App.jsx` — Router setup, all routes defined here
+- `src/data/products.js` — Product catalog with `categories` array and helper functions
+- `src/context/CartContext.jsx` — Cart reducer with ADD/REMOVE/UPDATE_QUANTITY/CLEAR actions
+- `public/sitemap.xml` and `public/robots.txt` — SEO files
+- `index.html` — Root HTML with OG/Twitter meta tags and Google Fonts
+
+## Design System
+
+- **No Tailwind** — plain CSS files alongside components
+- **Color palette**: pink (#e8a0bf), rose-dark (#c2789e), cream (#fdf6f0), pink-light (#f5d5e0)
+- **Typography**: Playfair Display (headings), Nunito (body) via Google Fonts
+- **CSS variables** defined in `src/index.css`
+
+## Categories
+
+Four product categories with slug IDs: `maquillage`, `soin-peau`, `soin-capillaire`, `parfums`
+
+## WhatsApp Ordering
+
+Orders are submitted via WhatsApp deep link to +21640599355 with a pre-filled message template. The `OrderForm` component builds and encodes this message.

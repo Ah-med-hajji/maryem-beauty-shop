@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://maryem-beauty-shop.vercel.app/sitemap.xml
