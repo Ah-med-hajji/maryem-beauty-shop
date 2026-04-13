@@ -252,6 +252,11 @@
 
 /* ── Responsive ── */
 @media (max-width: 900px) {
+  .navbar {
+    backdrop-filter: none;
+    background: var(--cream);
+  }
+
   .navbar__topbar-inner {
     gap: 12px;
     font-size: 0.72rem;
