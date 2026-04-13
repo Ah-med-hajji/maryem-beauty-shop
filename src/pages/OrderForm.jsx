@@ -126,8 +126,12 @@ export default function OrderForm() {
                 </div>
               ))}
             </div>
+            <div className="order-summary__shipping-info">
+              <p>🚚 Livraison gratuite à Sousse · 8 DT partout en Tunisie</p>
+              <p className="order-summary__shipping-note">Les frais de livraison seront confirmés via WhatsApp.</p>
+            </div>
             <div className="order-summary__total">
-              <span>Total</span>
+              <span>Total produits</span>
               <span>{totalPrice.toFixed(3)} DT</span>
             </div>
           </div>

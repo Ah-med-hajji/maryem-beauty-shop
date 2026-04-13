@@ -47,7 +47,7 @@ export default function Contact() {
           <div className="contact-info__card">
             <span className="contact-info__icon">📍</span>
             <h3>Adresse</h3>
-            <p>Tunisie</p>
+            <p>Kalaa Kebira, Sousse, Tunisie</p>
           </div>
         </div>
 

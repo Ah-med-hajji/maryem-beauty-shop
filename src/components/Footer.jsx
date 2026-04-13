@@ -8,6 +8,8 @@ export default function Footer() {
         <div className="footer__brand">
           <h3 className="footer__logo">🌸 Maryem Beauty Shop</h3>
           <p className="footer__tagline">Révélez votre beauté naturelle</p>
+          <p className="footer__location">📍 Kalaa Kebira, Sousse, Tunisie</p>
+          <p className="footer__shipping">🚚 Livraison gratuite à Sousse · 8 DT partout en Tunisie</p>
         </div>
 
         <div className="footer__links">
@@ -35,7 +37,7 @@ export default function Footer() {
             WhatsApp: +216 40 599 355
           </a>
           <p>contact@maryembeauty.tn</p>
-          <p>Tunisie</p>
+          <p>Kalaa Kebira, Sousse, Tunisie</p>
         </div>
 
         <div className="footer__social">

@@ -22,6 +22,7 @@ export default function ProductCard({ product }) {
             Ajouter au panier
           </button>
         </div>
+        <p className="product-card__shipping">🚚 Livraison gratuite à Sousse</p>
       </div>
     </article>
   );

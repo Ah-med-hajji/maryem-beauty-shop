@@ -33,10 +33,15 @@ export default function Category() {
       </section>
 
       <section className="category-products container">
+        <div className="category-products__shipping" data-animate>
+          🚚 Livraison gratuite à Sousse · 8 DT partout en Tunisie
+        </div>
         {products.length > 0 ? (
           <div className="category-products__grid">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {products.map((product, i) => (
+              <div key={product.id} data-animate data-delay={String((i % 4) + 1)}>
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
         ) : (

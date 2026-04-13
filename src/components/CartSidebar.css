@@ -152,6 +152,17 @@
   border-top: 2px solid var(--pink-light);
 }
 
+.cart-sidebar__shipping-note {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--rose-dark);
+  font-weight: 600;
+  padding: 10px 12px;
+  background: var(--cream);
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+
 .cart-sidebar__total {
   display: flex;
   justify-content: space-between;

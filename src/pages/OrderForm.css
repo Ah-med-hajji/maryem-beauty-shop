@@ -123,6 +123,28 @@
   color: var(--rose-dark);
 }
 
+.order-summary__shipping-info {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border: 1px solid var(--pink-light);
+}
+
+.order-summary__shipping-info p {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--rose-dark);
+  text-align: center;
+}
+
+.order-summary__shipping-note {
+  font-size: 0.78rem !important;
+  font-weight: 400 !important;
+  color: var(--text-light) !important;
+  margin-top: 6px;
+}
+
 .order-submit {
   width: 100%;
   font-size: 1rem;

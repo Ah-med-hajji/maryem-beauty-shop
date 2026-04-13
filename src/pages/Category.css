@@ -21,6 +21,17 @@
   padding: 50px 20px 80px;
 }
 
+.category-products__shipping {
+  text-align: center;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, var(--pink-light), var(--cream));
+  border-radius: var(--radius);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--rose-dark);
+  margin-bottom: 32px;
+}
+
 .category-products__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));

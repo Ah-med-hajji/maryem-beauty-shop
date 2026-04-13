@@ -70,3 +70,11 @@
   font-size: 0.8rem;
   white-space: nowrap;
 }
+
+.product-card__shipping {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: var(--rose-dark);
+  opacity: 0.8;
+  text-align: center;
+}

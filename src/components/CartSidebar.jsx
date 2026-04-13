@@ -52,6 +52,9 @@ export default function CartSidebar({ isOpen, onClose }) {
               ))}
             </div>
             <div className="cart-sidebar__footer">
+              <div className="cart-sidebar__shipping-note">
+                🚚 Livraison gratuite à Sousse · 8 DT partout en Tunisie
+              </div>
               <div className="cart-sidebar__total">
                 <span>Total</span>
                 <span>{totalPrice.toFixed(3)} DT</span>
