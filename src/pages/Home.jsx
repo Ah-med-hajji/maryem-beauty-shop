@@ -46,7 +46,7 @@ export default function Home() {
 
       {/* Categories */}
       <section className="categories container">
-        <h2 className="section-title" data-animate>Nos Catégories</h2>
+        <h2 className="section-title" data-animate>Nos Produits</h2>
         <p className="section-subtitle" data-animate data-delay="1">
           Explorez notre gamme de produits beauté soigneusement sélectionnés
         </p>
