@@ -4,6 +4,7 @@ import ScrollAnimator from "./components/ScrollAnimator";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import CartSidebar from "./components/CartSidebar";
+import MobileCartBar from "./components/MobileCartBar";
 import Home from "./pages/Home";
 import Category from "./pages/Category";
 import About from "./pages/About";
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="/commander" element={<OrderForm />} />
           </Routes>
           <Footer />
+          <MobileCartBar onCartClick={() => setCartOpen(true)} />
         </div>
       </ScrollAnimator>
     </BrowserRouter>

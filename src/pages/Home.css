@@ -288,16 +288,29 @@
   }
 
   .categories {
-    padding: 60px 16px;
+    padding: 60px 0;
   }
 
   .categories__grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 14px;
+    padding: 0 16px 16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .categories__grid::-webkit-scrollbar {
+    display: none;
   }
 
   .category-card {
-    padding: 20px 12px;
+    min-width: 160px;
+    max-width: 200px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    padding: 24px 14px;
   }
 
   .category-card__icon {
