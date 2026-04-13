@@ -99,6 +99,31 @@ const products = [
     category: "parfums",
     image: "/images/deodorant-she.jpg",
   },
+  // Lingerie
+  {
+    id: 13,
+    name: "Soutien-gorge Bambino",
+    description: "Soutien-gorge confortable et élégant, doux au toucher pour un port quotidien.",
+    price: 0.0,
+    category: "lingerie",
+    image: "/images/soutien-gorge-bambino.jpg",
+  },
+  {
+    id: 14,
+    name: "Soutien-gorge Rose Lovers",
+    description: "Soutien-gorge blanc avec détails floraux, féminin et raffiné pour une allure romantique.",
+    price: 0.0,
+    category: "lingerie",
+    image: "/images/soutien-gorge-rose-lovers.jpg",
+  },
+  {
+    id: 15,
+    name: "Soutien-gorge MOLLYSENA Beyond Comfort",
+    description: "Soutien-gorge MOLLYSENA alliant confort absolu et maintien parfait pour une féminité assumée.",
+    price: 0.0,
+    category: "lingerie",
+    image: "/images/soutien-gorge-mollysena.jpg",
+  },
 ];
 
 export const categories = [
@@ -106,6 +131,7 @@ export const categories = [
   { id: "soin-peau", name: "Soin de la Peau", description: "Prenez soin de votre peau avec nos soins hydratants et nourrissants" },
   { id: "soin-capillaire", name: "Soin Capillaire", description: "Révélez la beauté de vos cheveux avec nos soins capillaires expert" },
   { id: "parfums", name: "Parfums", description: "Enveloppez-vous de fragrances envoûtantes et inoubliables" },
+  { id: "lingerie", name: "Lingerie", description: "Découvrez notre lingerie féminine alliant confort, élégance et raffinement" },
 ];
 
 export function getProductsByCategory(categoryId) {

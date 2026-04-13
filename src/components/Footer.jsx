@@ -18,6 +18,7 @@ export default function Footer() {
             <li><Link to="/categorie/soin-peau">Soin de la Peau</Link></li>
             <li><Link to="/categorie/soin-capillaire">Soin Capillaire</Link></li>
             <li><Link to="/categorie/parfums">Parfums</Link></li>
+            <li><Link to="/categorie/lingerie">Lingerie</Link></li>
             <li><Link to="/a-propos">À Propos</Link></li>
             <li><Link to="/contact">Contact</Link></li>
           </ul>

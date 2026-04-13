@@ -38,6 +38,7 @@ export default function Home() {
                 {cat.id === "soin-peau" && "✨"}
                 {cat.id === "soin-capillaire" && "💇‍♀️"}
                 {cat.id === "parfums" && "🌸"}
+                {cat.id === "lingerie" && "🩱"}
               </div>
               <h3 className="category-card__name">{cat.name}</h3>
               <p className="category-card__desc">{cat.description}</p>

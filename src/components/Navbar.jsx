@@ -40,6 +40,7 @@ export default function Navbar({ onCartClick }) {
           <li><NavLink to="/categorie/soin-peau" onClick={closeMenu}>Soin de la Peau</NavLink></li>
           <li><NavLink to="/categorie/soin-capillaire" onClick={closeMenu}>Soin Capillaire</NavLink></li>
           <li><NavLink to="/categorie/parfums" onClick={closeMenu}>Parfums</NavLink></li>
+          <li><NavLink to="/categorie/lingerie" onClick={closeMenu}>Lingerie</NavLink></li>
           <li><NavLink to="/a-propos" onClick={closeMenu}>À Propos</NavLink></li>
           <li><NavLink to="/contact" onClick={closeMenu}>Contact</NavLink></li>
         </ul>
