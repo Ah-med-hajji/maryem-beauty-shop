@@ -353,7 +353,24 @@
 }
 
 @media (max-width: 480px) {
+  .navbar__inner {
+    padding: 12px 16px;
+  }
+
+  .navbar__logo {
+    font-size: 1.1rem;
+    gap: 6px;
+  }
+
+  .navbar__logo-icon {
+    font-size: 1.3rem;
+  }
+
   .navbar__topbar-item:not(.navbar__topbar-shipping) {
     font-size: 0.68rem;
+  }
+
+  .navbar__topbar-inner {
+    gap: 8px;
   }
 }

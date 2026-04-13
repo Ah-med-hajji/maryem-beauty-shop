@@ -115,6 +115,21 @@ button {
   .section-title {
     font-size: 1.6rem;
   }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
 }
 
 /* ── Scroll animations ── */

@@ -270,6 +270,10 @@
     min-height: 70vh;
   }
 
+  .hero__content {
+    padding: 60px 16px;
+  }
+
   .hero__title {
     font-size: 1.9rem;
   }
@@ -278,9 +282,43 @@
     font-size: 1rem;
   }
 
+  .hero__badge {
+    font-size: 0.8rem;
+    padding: 8px 16px;
+  }
+
+  .categories {
+    padding: 60px 16px;
+  }
+
   .categories__grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: 12px;
+  }
+
+  .category-card {
+    padding: 20px 12px;
+  }
+
+  .category-card__icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .category-card__name {
+    font-size: 0.95rem;
+  }
+
+  .category-card__desc {
+    font-size: 0.78rem;
+  }
+
+  .category-card__link {
+    font-size: 0.82rem;
+  }
+
+  .about-teaser {
+    padding: 60px 0;
   }
 
   .about-teaser__inner {
@@ -293,11 +331,23 @@
     height: 160px;
   }
 
+  .shipping-section {
+    padding: 20px 16px 60px;
+  }
+
   .shipping-section__inner {
-    padding: 36px 20px 32px;
+    padding: 32px 16px 28px;
   }
 
   .shipping-section__cards {
-    gap: 20px;
+    gap: 16px;
+  }
+
+  .shipping-section__card h3 {
+    font-size: 0.85rem;
+  }
+
+  .shipping-section__price {
+    font-size: 1.1rem;
   }
 }
