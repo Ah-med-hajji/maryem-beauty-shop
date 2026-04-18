@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { categories } from "../data/products";
+import { useData } from "../context/DataContext";
 import "./Home.css";
 
 const categoryIcons = {
@@ -12,6 +12,8 @@ const categoryIcons = {
 };
 
 export default function Home() {
+  const { categories, loading } = useData();
+
   return (
     <main>
       <Helmet>
@@ -50,22 +52,26 @@ export default function Home() {
         <p className="section-subtitle" data-animate data-delay="1">
           Explorez notre gamme de produits beauté soigneusement sélectionnés
         </p>
-        <div className="categories__grid">
-          {categories.map((cat, i) => (
-            <Link
-              key={cat.id}
-              to={`/categorie/${cat.id}`}
-              className="category-card"
-              data-animate
-              data-delay={String(i + 1)}
-            >
-              <div className="category-card__icon">{categoryIcons[cat.id]}</div>
-              <h3 className="category-card__name">{cat.name}</h3>
-              <p className="category-card__desc">{cat.description}</p>
-              <span className="category-card__link">Voir les produits →</span>
-            </Link>
-          ))}
-        </div>
+        {loading ? (
+          <p style={{ textAlign: "center", color: "var(--text-light)" }}>Chargement...</p>
+        ) : (
+          <div className="categories__grid">
+            {categories.map((cat, i) => (
+              <Link
+                key={cat.id}
+                to={`/categorie/${cat.id}`}
+                className="category-card"
+                data-animate
+                data-delay={String(i + 1)}
+              >
+                <div className="category-card__icon">{categoryIcons[cat.id] || "✨"}</div>
+                <h3 className="category-card__name">{cat.name}</h3>
+                <p className="category-card__desc">{cat.description}</p>
+                <span className="category-card__link">Voir les produits →</span>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* About teaser */}

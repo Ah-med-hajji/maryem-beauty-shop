@@ -1,13 +1,22 @@
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { getProductsByCategory, categories } from "../data/products";
+import { useData } from "../context/DataContext";
 import ProductCard from "../components/ProductCard";
 import "./Category.css";
 
 export default function Category() {
   const { categoryId } = useParams();
+  const { categories, getProductsByCategory, loading } = useData();
   const category = categories.find((c) => c.id === categoryId);
   const products = getProductsByCategory(categoryId);
+
+  if (loading) {
+    return (
+      <main className="container" style={{ paddingTop: "40px", textAlign: "center" }}>
+        <p style={{ color: "var(--text-light)" }}>Chargement...</p>
+      </main>
+    );
+  }
 
   if (!category) {
     return (
