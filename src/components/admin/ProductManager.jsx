@@ -16,15 +16,25 @@ export default function ProductManager() {
   const [error, setError] = useState("");
 
   const fetchData = useCallback(async () => {
-    const [prodRes, catRes] = await Promise.all([
-      supabaseAdmin.from("products").select("*").order("id"),
-      supabaseAdmin.from("categories").select("slug, name").order("name"),
-    ]);
-    if (prodRes.error) setError(prodRes.error.message);
-    else setProducts(prodRes.data);
-    if (catRes.error) setError(catRes.error.message);
-    else setCategories(catRes.data);
-    setLoading(false);
+    if (!supabaseAdmin) {
+      setError("Supabase non configuré. Vérifiez les variables d'environnement.");
+      setLoading(false);
+      return;
+    }
+    try {
+      const [prodRes, catRes] = await Promise.all([
+        supabaseAdmin.from("products").select("*").order("id"),
+        supabaseAdmin.from("categories").select("slug, name").order("name"),
+      ]);
+      if (prodRes.error) throw prodRes.error;
+      if (catRes.error) throw catRes.error;
+      setProducts(prodRes.data || []);
+      setCategories(catRes.data || []);
+    } catch (err) {
+      setError(err.message || "Erreur lors du chargement des produits");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -71,54 +81,69 @@ export default function ProductManager() {
       is_active: form.is_active,
     };
 
-    if (editing) {
-      const { error } = await supabaseAdmin
-        .from("products")
-        .update(payload)
-        .eq("id", editing);
-      if (error) {
-        setError(error.message);
-        setSaving(false);
-        return;
+    try {
+      if (editing) {
+        const { error } = await supabaseAdmin
+          .from("products")
+          .update(payload)
+          .eq("id", editing);
+        if (error) throw error;
+      } else {
+        const { error } = await supabaseAdmin
+          .from("products")
+          .insert(payload);
+        if (error) throw error;
       }
-    } else {
-      const { error } = await supabaseAdmin
-        .from("products")
-        .insert(payload);
-      if (error) {
-        setError(error.message);
-        setSaving(false);
-        return;
-      }
+      setShowForm(false);
+      fetchData();
+    } catch (err) {
+      setError(err.message || "Erreur lors de l'enregistrement");
+    } finally {
+      setSaving(false);
     }
-
-    setShowForm(false);
-    setSaving(false);
-    fetchData();
   };
 
   const handleDelete = async (id) => {
-    const { error } = await supabaseAdmin.from("products").delete().eq("id", id);
-    if (error) {
-      setError(error.message);
-    } else {
+    try {
+      const { error } = await supabaseAdmin.from("products").delete().eq("id", id);
+      if (error) throw error;
       setConfirmDelete(null);
       fetchData();
+    } catch (err) {
+      setError(err.message);
     }
   };
 
   const toggleActive = async (product) => {
-    const { error } = await supabaseAdmin
-      .from("products")
-      .update({ is_active: !product.is_active })
-      .eq("id", product.id);
-    if (error) setError(error.message);
-    else fetchData();
+    try {
+      const { error } = await supabaseAdmin
+        .from("products")
+        .update({ is_active: !product.is_active })
+        .eq("id", product.id);
+      if (error) throw error;
+      fetchData();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const catName = (slug) => categories.find((c) => c.slug === slug)?.name || slug;
 
   if (loading) return <div className="admin-loading">Chargement...</div>;
+
+  if (error && products.length === 0) {
+    return (
+      <section>
+        <div className="admin-section-header">
+          <h2>Produits</h2>
+          <button className="btn btn-primary" onClick={openAdd}>+ Ajouter</button>
+        </div>
+        <div className="admin-empty">
+          <p style={{ color: "#d32f2f" }}>{error}</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section>
@@ -163,9 +188,7 @@ export default function ProductManager() {
                   </td>
                   <td>
                     <strong>{product.name}</strong>
-                    {product.description && (
-                      <br />
-                    )}
+                    {product.description && <br />}
                     <span style={{ fontSize: "0.8rem", color: "#6b5860" }}>
                       {product.description?.substring(0, 60)}{product.description?.length > 60 ? "..." : ""}
                     </span>
@@ -311,7 +334,7 @@ export default function ProductManager() {
         </AdminModal>
       )}
 
-      {error && !showForm && !confirmDelete && (
+      {error && !showForm && !confirmDelete && products.length > 0 && (
         <p className="admin-login__error" style={{ marginTop: "12px" }}>{error}</p>
       )}
     </section>

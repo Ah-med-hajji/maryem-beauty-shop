@@ -26,24 +26,31 @@ export function DataProvider({ children }) {
       if (catRes.error) throw catRes.error;
       if (prodRes.error) throw prodRes.error;
 
-      // Map Supabase snake_case to the camelCase shape the app expects
-      const mappedProducts = prodRes.data.map((p) => ({
-        id: p.id,
-        name: p.name,
-        description: p.description,
-        price: Number(p.price),
-        category: p.category_slug,
-        image: p.image,
-      }));
+      // If Supabase returned data, use it
+      if (catRes.data.length > 0 && prodRes.data.length > 0) {
+        const mappedProducts = prodRes.data.map((p) => ({
+          id: p.id,
+          name: p.name,
+          description: p.description,
+          price: Number(p.price),
+          category: p.category_slug,
+          image: p.image,
+        }));
 
-      const mappedCategories = catRes.data.map((c) => ({
-        id: c.slug,
-        name: c.name,
-        description: c.description,
-      }));
+        const mappedCategories = catRes.data.map((c) => ({
+          id: c.slug,
+          name: c.name,
+          description: c.description,
+        }));
 
-      setProducts(mappedProducts);
-      setCategories(mappedCategories);
+        setProducts(mappedProducts);
+        setCategories(mappedCategories);
+      } else {
+        // Tables exist but are empty — fall back to static data
+        console.warn("Supabase tables are empty, using static data");
+        setProducts(staticProducts);
+        setCategories(staticCategories);
+      }
     } catch (err) {
       console.warn("Supabase fetch failed, using static data:", err.message);
       setProducts(staticProducts);

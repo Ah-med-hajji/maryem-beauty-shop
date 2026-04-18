@@ -15,16 +15,23 @@ export default function CategoryManager() {
   const [error, setError] = useState("");
 
   const fetchCategories = useCallback(async () => {
-    const { data, error } = await supabaseAdmin
-      .from("categories")
-      .select("slug, name, description, products:products(count)")
-      .order("name");
-    if (error) {
-      setError(error.message);
-    } else {
-      setCategories(data);
+    if (!supabaseAdmin) {
+      setError("Supabase non configuré. Vérifiez les variables d'environnement.");
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+    try {
+      const { data, error } = await supabaseAdmin
+        .from("categories")
+        .select("slug, name, description, products:products(count)")
+        .order("name");
+      if (error) throw error;
+      setCategories(data || []);
+    } catch (err) {
+      setError(err.message || "Erreur lors du chargement des catégories");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -55,43 +62,54 @@ export default function CategoryManager() {
       return;
     }
 
-    if (editing) {
-      const { error } = await supabaseAdmin
-        .from("categories")
-        .update({ name: form.name.trim(), description: form.description.trim() || null })
-        .eq("slug", editing);
-      if (error) {
-        setError(error.message);
-        setSaving(false);
-        return;
+    try {
+      if (editing) {
+        const { error } = await supabaseAdmin
+          .from("categories")
+          .update({ name: form.name.trim(), description: form.description.trim() || null })
+          .eq("slug", editing);
+        if (error) throw error;
+      } else {
+        const { error } = await supabaseAdmin
+          .from("categories")
+          .insert({ slug: form.slug.trim(), name: form.name.trim(), description: form.description.trim() || null });
+        if (error) throw error;
       }
-    } else {
-      const { error } = await supabaseAdmin
-        .from("categories")
-        .insert({ slug: form.slug.trim(), name: form.name.trim(), description: form.description.trim() || null });
-      if (error) {
-        setError(error.message);
-        setSaving(false);
-        return;
-      }
+      setShowForm(false);
+      fetchCategories();
+    } catch (err) {
+      setError(err.message || "Erreur lors de l'enregistrement");
+    } finally {
+      setSaving(false);
     }
-
-    setShowForm(false);
-    setSaving(false);
-    fetchCategories();
   };
 
   const handleDelete = async (slug) => {
-    const { error } = await supabaseAdmin.from("categories").delete().eq("slug", slug);
-    if (error) {
-      setError(error.message);
-    } else {
+    try {
+      const { error } = await supabaseAdmin.from("categories").delete().eq("slug", slug);
+      if (error) throw error;
       setConfirmDelete(null);
       fetchCategories();
+    } catch (err) {
+      setError(err.message);
     }
   };
 
   if (loading) return <div className="admin-loading">Chargement...</div>;
+
+  if (error && categories.length === 0) {
+    return (
+      <section>
+        <div className="admin-section-header">
+          <h2>Catégories</h2>
+          <button className="btn btn-primary" onClick={openAdd}>+ Ajouter</button>
+        </div>
+        <div className="admin-empty">
+          <p style={{ color: "#d32f2f" }}>{error}</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section>
@@ -205,6 +223,7 @@ export default function CategoryManager() {
                 className="btn btn-primary"
                 style={{ background: "#d32f2f" }}
                 onClick={() => handleDelete(confirmDelete.slug)}
+                disabled={(confirmDelete.products?.[0]?.count ?? 0) > 0}
               >
                 Supprimer
               </button>
