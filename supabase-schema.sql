@@ -68,3 +68,25 @@ ON CONFLICT DO NOTHING;
 
 -- Reset the sequence so new products get IDs starting after the seed data
 SELECT setval('products_id_seq', (SELECT COALESCE(MAX(id), 0) FROM products));
+
+-- =============================================
+-- Storage: product-images bucket
+-- =============================================
+
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('product-images', 'product-images', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Allow public read access to product images
+CREATE POLICY "Public read product images" ON storage.objects
+  FOR SELECT USING (bucket_id = 'product-images');
+
+-- Allow service_role to upload/delete
+CREATE POLICY "Admin upload product images" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'product-images' AND auth.role() = 'service_role');
+
+CREATE POLICY "Admin update product images" ON storage.objects
+  FOR UPDATE USING (bucket_id = 'product-images' AND auth.role() = 'service_role');
+
+CREATE POLICY "Admin delete product images" ON storage.objects
+  FOR DELETE USING (bucket_id = 'product-images' AND auth.role() = 'service_role');

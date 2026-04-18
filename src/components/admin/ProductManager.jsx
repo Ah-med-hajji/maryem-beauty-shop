@@ -14,6 +14,9 @@ export default function ProductManager() {
   const [saving, setSaving] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [error, setError] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const fetchData = useCallback(async () => {
     if (!supabaseAdmin) {
@@ -44,6 +47,8 @@ export default function ProductManager() {
   const openAdd = () => {
     setEditing(null);
     setForm({ ...emptyForm, category_slug: categories[0]?.slug || "" });
+    setImageFile(null);
+    setImagePreview("");
     setError("");
     setShowForm(true);
   };
@@ -58,8 +63,37 @@ export default function ProductManager() {
       image: product.image || "",
       is_active: product.is_active,
     });
+    setImageFile(null);
+    setImagePreview(product.image || "");
     setError("");
     setShowForm(true);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setError("L'image ne doit pas dépasser 5 Mo");
+      return;
+    }
+    setImageFile(file);
+    setError("");
+    const reader = new FileReader();
+    reader.onload = (ev) => setImagePreview(ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const uploadImage = async (file) => {
+    const ext = file.name.split(".").pop();
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    setUploading(true);
+    const { error } = await supabaseAdmin.storage
+      .from("product-images")
+      .upload(filename, file, { upsert: false });
+    setUploading(false);
+    if (error) throw error;
+    const { data } = supabaseAdmin.storage.from("product-images").getPublicUrl(filename);
+    return data.publicUrl;
   };
 
   const handleSave = async () => {
@@ -72,16 +106,22 @@ export default function ProductManager() {
       return;
     }
 
-    const payload = {
-      name: form.name.trim(),
-      description: form.description.trim() || null,
-      price: parseFloat(form.price) || 0,
-      category_slug: form.category_slug,
-      image: form.image.trim() || null,
-      is_active: form.is_active,
-    };
-
     try {
+      let imageUrl = form.image;
+
+      if (imageFile) {
+        imageUrl = await uploadImage(imageFile);
+      }
+
+      const payload = {
+        name: form.name.trim(),
+        description: form.description.trim() || null,
+        price: parseFloat(form.price) || 0,
+        category_slug: form.category_slug,
+        image: imageUrl || null,
+        is_active: form.is_active,
+      };
+
       if (editing) {
         const { error } = await supabaseAdmin
           .from("products")
@@ -283,14 +323,34 @@ export default function ProductManager() {
             </div>
           </div>
           <div className="admin-field">
-            <label htmlFor="prod-image">URL de l'image</label>
-            <input
-              id="prod-image"
-              value={form.image}
-              onChange={(e) => setForm({ ...form, image: e.target.value })}
-              placeholder="/images/mon-produit.jpg"
-            />
-            <p className="admin-field__hint">Chemin relatif (/images/...) ou URL complète</p>
+            <label>Image du produit</label>
+            <div className="admin-upload">
+              {imagePreview ? (
+                <div className="admin-upload__preview">
+                  <img src={imagePreview} alt="Aperçu" />
+                  <button
+                    type="button"
+                    className="admin-upload__remove"
+                    onClick={() => { setImageFile(null); setImagePreview(""); setForm({ ...form, image: "" }); }}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <label className="admin-upload__zone">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    hidden
+                  />
+                  <span className="admin-upload__icon">📷</span>
+                  <span className="admin-upload__text">Appuyez pour sélectionner une image</span>
+                  <span className="admin-upload__hint">JPG, PNG — 5 Mo max</span>
+                </label>
+              )}
+              {uploading && <p style={{ color: "var(--rose-dark)", fontSize: "0.85rem", marginTop: 8 }}>Envoi en cours...</p>}
+            </div>
           </div>
           {editing && (
             <div className="admin-field">
