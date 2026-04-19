@@ -11,7 +11,7 @@ export default function Category() {
 
   useEffect(() => {
     refetch();
-  }, [refetch]);
+  }, [refetch, categoryId]);
   const category = categories.find((c) => c.id === categoryId);
   const products = getProductsByCategory(categoryId);
 
