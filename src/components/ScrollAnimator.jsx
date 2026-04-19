@@ -19,10 +19,23 @@ export default function ScrollAnimator({ children }) {
       { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
     );
 
-    const elements = document.querySelectorAll("[data-animate]");
-    elements.forEach((el) => observer.observe(el));
+    const scan = () => {
+      document.querySelectorAll("[data-animate]:not(.is-visible)").forEach((el) => {
+        observer.observe(el);
+      });
+    };
 
-    return () => observer.disconnect();
+    // Initial scan
+    scan();
+
+    // Re-scan when new elements are added to the DOM (e.g. after data loads)
+    const mutationObserver = new MutationObserver(scan);
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+    };
   }, [location.pathname]);
 
   return children;

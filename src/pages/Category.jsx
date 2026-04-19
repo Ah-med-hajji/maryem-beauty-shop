@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useData } from "../context/DataContext";
@@ -6,7 +7,11 @@ import "./Category.css";
 
 export default function Category() {
   const { categoryId } = useParams();
-  const { categories, getProductsByCategory, loading } = useData();
+  const { categories, getProductsByCategory, loading, refetch } = useData();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   const category = categories.find((c) => c.id === categoryId);
   const products = getProductsByCategory(categoryId);
 

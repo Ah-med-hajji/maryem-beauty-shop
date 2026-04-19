@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import supabase from "../lib/supabase";
 import staticProducts, { categories as staticCategories } from "../data/products";
 
@@ -8,8 +8,9 @@ export function DataProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const initialLoadDone = useRef(false);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (silent = false) => {
     if (!supabase) {
       setProducts(staticProducts);
       setCategories(staticCategories);
@@ -26,8 +27,20 @@ export function DataProvider({ children }) {
       if (catRes.error) throw catRes.error;
       if (prodRes.error) throw prodRes.error;
 
-      // If Supabase returned data, use it
-      if (catRes.data.length > 0 && prodRes.data.length > 0) {
+      // Handle categories and products independently — one empty table
+      // should not prevent the other from loading.
+      if (catRes.data.length > 0) {
+        const mappedCategories = catRes.data.map((c) => ({
+          id: c.slug,
+          name: c.name,
+          description: c.description,
+        }));
+        setCategories(mappedCategories);
+      } else {
+        setCategories(staticCategories);
+      }
+
+      if (prodRes.data.length > 0) {
         const mappedProducts = prodRes.data.map((p) => ({
           id: p.id,
           name: p.name,
@@ -36,32 +49,28 @@ export function DataProvider({ children }) {
           category: p.category_slug,
           image: p.image,
         }));
-
-        const mappedCategories = catRes.data.map((c) => ({
-          id: c.slug,
-          name: c.name,
-          description: c.description,
-        }));
-
         setProducts(mappedProducts);
-        setCategories(mappedCategories);
       } else {
-        // Tables exist but are empty — fall back to static data
-        console.warn("Supabase tables are empty, using static data");
+        setProducts(staticProducts);
+      }
+    } catch (err) {
+      if (!silent) {
+        console.warn("Supabase fetch failed, using static data:", err.message);
         setProducts(staticProducts);
         setCategories(staticCategories);
       }
-    } catch (err) {
-      console.warn("Supabase fetch failed, using static data:", err.message);
-      setProducts(staticProducts);
-      setCategories(staticCategories);
     } finally {
       setLoading(false);
+      initialLoadDone.current = true;
     }
   }, []);
 
   useEffect(() => {
     fetchData();
+  }, [fetchData]);
+
+  const refetch = useCallback(() => {
+    fetchData(initialLoadDone.current);
   }, [fetchData]);
 
   const getProductsByCategory = useCallback(
@@ -82,7 +91,7 @@ export function DataProvider({ children }) {
         loading,
         getProductsByCategory,
         getProductById,
-        refetch: fetchData,
+        refetch,
       }}
     >
       {children}

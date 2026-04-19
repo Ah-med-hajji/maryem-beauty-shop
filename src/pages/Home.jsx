@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
 import { useData } from "../context/DataContext";
 import "./Home.css";
 
@@ -12,7 +13,11 @@ const categoryIcons = {
 };
 
 export default function Home() {
-  const { categories, loading } = useData();
+  const { categories, loading, refetch } = useData();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <main>
