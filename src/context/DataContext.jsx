@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
-import supabase from "../lib/supabase";
+import supabaseAdmin from "../lib/supabaseAdmin";
 import staticProducts, { categories as staticCategories } from "../data/products";
 
 const DataContext = createContext();
@@ -11,7 +11,7 @@ export function DataProvider({ children }) {
   const isFirstLoad = useRef(true);
 
   const fetchData = useCallback(async () => {
-    if (!supabase) {
+    if (!supabaseAdmin) {
       setProducts(staticProducts);
       setCategories(staticCategories);
       setLoading(false);
@@ -20,8 +20,8 @@ export function DataProvider({ children }) {
 
     try {
       const [catRes, prodRes] = await Promise.all([
-        supabase.from("categories").select("*").order("name"),
-        supabase.from("products").select("*").eq("is_active", true).order("id"),
+        supabaseAdmin.from("categories").select("*").order("name"),
+        supabaseAdmin.from("products").select("*").eq("is_active", true).order("id"),
       ]);
 
       if (catRes.error) throw catRes.error;
