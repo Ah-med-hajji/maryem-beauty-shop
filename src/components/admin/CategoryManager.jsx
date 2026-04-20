@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import supabaseAdmin from "../../lib/supabaseAdmin";
 import AdminModal from "./AdminModal";
 
-const emptyForm = { slug: "", name: "", description: "" };
+const emptyForm = { slug: "", name: "", description: "", icon: "" };
+
+const commonIcons = ["💄", "✨", "💇‍♀️", "🌸", "🩱", "👗", "💅", "🧴", "🌿", "💎", "🪷", "🧖‍♀️", "🎀", "🫧", "💋", "🪞"];
 
 export default function CategoryManager() {
   const [categories, setCategories] = useState([]);
@@ -47,7 +49,7 @@ export default function CategoryManager() {
 
   const openEdit = (cat) => {
     setEditing(cat.slug);
-    setForm({ slug: cat.slug, name: cat.name, description: cat.description || "" });
+    setForm({ slug: cat.slug, name: cat.name, description: cat.description || "", icon: cat.icon || "" });
     setError("");
     setShowForm(true);
   };
@@ -66,13 +68,13 @@ export default function CategoryManager() {
       if (editing) {
         const { error } = await supabaseAdmin
           .from("categories")
-          .update({ name: form.name.trim(), description: form.description.trim() || null })
+          .update({ name: form.name.trim(), description: form.description.trim() || null, icon: form.icon.trim() || null })
           .eq("slug", editing);
         if (error) throw error;
       } else {
         const { error } = await supabaseAdmin
           .from("categories")
-          .insert({ slug: form.slug.trim(), name: form.name.trim(), description: form.description.trim() || null });
+          .insert({ slug: form.slug.trim(), name: form.name.trim(), description: form.description.trim() || null, icon: form.icon.trim() || null });
         if (error) throw error;
       }
       setShowForm(false);
@@ -132,6 +134,7 @@ export default function CategoryManager() {
           <table className="admin-table">
             <thead>
               <tr>
+                <th>Icône</th>
                 <th>Slug</th>
                 <th>Nom</th>
                 <th>Produits</th>
@@ -141,6 +144,7 @@ export default function CategoryManager() {
             <tbody>
               {categories.map((cat) => (
                 <tr key={cat.slug}>
+                  <td style={{ fontSize: "1.3rem" }}>{cat.icon || "✨"}</td>
                   <td><code>{cat.slug}</code></td>
                   <td>{cat.name}</td>
                   <td>{cat.products?.[0]?.count ?? 0}</td>
@@ -188,6 +192,30 @@ export default function CategoryManager() {
               <p className="admin-field__hint">Lettres minuscules, chiffres et tirets uniquement</p>
             </div>
           )}
+          <div className="admin-field">
+            <label htmlFor="cat-icon">Icône</label>
+            <div className="admin-icon-picker">
+              {commonIcons.map((emoji) => (
+                <button
+                  key={emoji}
+                  type="button"
+                  className={`admin-icon-picker__btn ${form.icon === emoji ? "active" : ""}`}
+                  onClick={() => setForm({ ...form, icon: emoji })}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+              <input
+                value={form.icon}
+                onChange={(e) => setForm({ ...form, icon: e.target.value })}
+                placeholder="Ou tapez un emoji"
+                style={{ flex: 1, padding: "8px 12px", border: "2px solid var(--pink-light)", borderRadius: "8px", fontSize: "1rem" }}
+              />
+              <span style={{ fontSize: "1.5rem", lineHeight: "2.2" }}>{form.icon || "✨"}</span>
+            </div>
+          </div>
           <div className="admin-field">
             <label htmlFor="cat-name">Nom</label>
             <input

@@ -33,6 +33,7 @@ export function DataProvider({ children }) {
           id: c.slug,
           name: c.name,
           description: c.description,
+          icon: c.icon || "✨",
         })));
       } else {
         setCategories(staticCategories);

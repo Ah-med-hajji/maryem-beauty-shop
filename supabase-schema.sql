@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS categories (
   slug TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   description TEXT,
+  icon TEXT DEFAULT '✨',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -39,12 +40,12 @@ CREATE POLICY "Public read active products" ON products
 -- =============================================
 
 -- Categories
-INSERT INTO categories (slug, name, description) VALUES
-  ('maquillage', 'Maquillage', 'Sublimez votre regard et vos lèvres avec nos produits maquillage professionnels'),
-  ('soin-peau', 'Soin de la Peau', 'Prenez soin de votre peau avec nos soins hydratants et nourrissants'),
-  ('soin-capillaire', 'Soin Capillaire', 'Révélez la beauté de vos cheveux avec nos soins capillaires expert'),
-  ('parfums', 'Parfums', 'Enveloppez-vous de fragrances envoûtantes et inoubliables'),
-  ('lingerie', 'Lingerie', 'Découvrez notre lingerie féminine alliant confort, élégance et raffinement')
+INSERT INTO categories (slug, name, description, icon) VALUES
+  ('maquillage', 'Maquillage', 'Sublimez votre regard et vos lèvres avec nos produits maquillage professionnels', '💄'),
+  ('soin-peau', 'Soin de la Peau', 'Prenez soin de votre peau avec nos soins hydratants et nourrissants', '✨'),
+  ('soin-capillaire', 'Soin Capillaire', 'Révélez la beauté de vos cheveux avec nos soins capillaires expert', '💇‍♀️'),
+  ('parfums', 'Parfums', 'Enveloppez-vous de fragrances envoûtantes et inoubliables', '🌸'),
+  ('lingerie', 'Lingerie', 'Découvrez notre lingerie féminine alliant confort, élégance et raffinement', '🩱')
 ON CONFLICT (slug) DO NOTHING;
 
 -- Products (explicit IDs to match existing cart references)

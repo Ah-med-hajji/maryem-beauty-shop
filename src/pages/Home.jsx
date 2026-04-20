@@ -4,14 +4,6 @@ import { useEffect } from "react";
 import { useData } from "../context/DataContext";
 import "./Home.css";
 
-const categoryIcons = {
-  maquillage: "💄",
-  "soin-peau": "✨",
-  "soin-capillaire": "💇‍♀️",
-  parfums: "🌸",
-  lingerie: "🩱",
-};
-
 export default function Home() {
   const { categories, loading, refetch } = useData();
 
@@ -69,7 +61,7 @@ export default function Home() {
                 data-animate
                 data-delay={String(i + 1)}
               >
-                <div className="category-card__icon">{categoryIcons[cat.id] || "✨"}</div>
+                <div className="category-card__icon">{cat.icon || "✨"}</div>
                 <h3 className="category-card__name">{cat.name}</h3>
                 <p className="category-card__desc">{cat.description}</p>
                 <span className="category-card__link">Voir les produits →</span>

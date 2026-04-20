@@ -1,19 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { categories, getProductsByCategory } from "../data/products";
+import { useData } from "../context/DataContext";
 import "./Navbar.css";
-
-const categoryIcons = {
-  maquillage: "💄",
-  "soin-peau": "✨",
-  "soin-capillaire": "💇‍♀️",
-  parfums: "🌸",
-  lingerie: "🩱",
-};
 
 export default function Navbar({ onCartClick }) {
   const { totalItems } = useCart();
+  const { categories, getProductsByCategory } = useData();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -107,7 +100,7 @@ export default function Navbar({ onCartClick }) {
               {categories.map((cat) => (
                 <div key={cat.id} className="navbar__mega-cat">
                   <Link to={`/categorie/${cat.id}`} className="navbar__mega-cat-title" onClick={closeMenu}>
-                    <span className="navbar__mega-icon">{categoryIcons[cat.id]}</span>
+                    <span className="navbar__mega-icon">{cat.icon || "✨"}</span>
                     {cat.name}
                   </Link>
                   <ul className="navbar__mega-products">
@@ -128,7 +121,7 @@ export default function Navbar({ onCartClick }) {
               {categories.map((cat) => (
                 <div key={cat.id} className="navbar__mobile-cat">
                   <button className="navbar__mobile-cat-btn" onClick={() => toggleCategory(cat.id)}>
-                    <span>{categoryIcons[cat.id]} {cat.name}</span>
+                    <span>{cat.icon || "✨"} {cat.name}</span>
                     <svg
                       className={`navbar__mobile-chevron ${expandedCat === cat.id ? "open" : ""}`}
                       width="14" height="14" viewBox="0 0 14 14"
