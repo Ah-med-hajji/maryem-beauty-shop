@@ -64,7 +64,7 @@ export default function Navbar({ onCartClick }) {
       {/* Main nav */}
       <nav className="navbar__inner container">
         <Link to="/" className="navbar__logo" onClick={closeMenu}>
-          <span className="navbar__logo-icon">🌸</span>
+          <img src="/favicon.svg" alt="" className="navbar__logo-icon" />
           <span className="navbar__logo-text">Maryem Beauty Shop</span>
         </Link>
 

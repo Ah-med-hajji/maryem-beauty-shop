@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer__inner">
         <div className="footer__brand">
-          <h3 className="footer__logo">🌸 Maryem Beauty Shop</h3>
+          <h3 className="footer__logo"><img src="/favicon.svg" alt="" style={{width: 28, height: 28, verticalAlign: 'middle', marginRight: 6}} />Maryem Beauty Shop</h3>
           <p className="footer__tagline">Révélez votre beauté naturelle</p>
           <p className="footer__location">📍 Kalaa Kebira, Sousse, Tunisie</p>
           <p className="footer__shipping">🚚 Livraison gratuite à Sousse · 8 DT partout en Tunisie</p>

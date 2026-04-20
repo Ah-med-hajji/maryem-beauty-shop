@@ -69,7 +69,8 @@
 }
 
 .navbar__logo-icon {
-  font-size: 1.5rem;
+  width: 32px;
+  height: 32px;
 }
 
 /* ── Links ── */
@@ -368,7 +369,8 @@
   }
 
   .navbar__logo-icon {
-    font-size: 1.3rem;
+    width: 26px;
+    height: 26px;
   }
 
   .navbar__topbar-item:not(.navbar__topbar-shipping) {
