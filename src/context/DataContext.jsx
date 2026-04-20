@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import supabase from "../lib/supabase";
 import staticProducts, { categories as staticCategories } from "../data/products";
 
@@ -8,6 +8,7 @@ export function DataProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const isFirstLoad = useRef(true);
 
   const fetchData = useCallback(async () => {
     if (!supabase) {
@@ -26,8 +27,6 @@ export function DataProvider({ children }) {
       if (catRes.error) throw catRes.error;
       if (prodRes.error) throw prodRes.error;
 
-      // Handle categories and products independently — one empty table
-      // should not prevent the other from loading.
       if (catRes.data.length > 0) {
         setCategories(catRes.data.map((c) => ({
           id: c.slug,
@@ -35,7 +34,7 @@ export function DataProvider({ children }) {
           description: c.description,
           icon: c.icon || "✨",
         })));
-      } else {
+      } else if (isFirstLoad.current) {
         setCategories(staticCategories);
       }
 
@@ -48,15 +47,18 @@ export function DataProvider({ children }) {
           category: p.category_slug,
           image: p.image,
         })));
-      } else {
+      } else if (isFirstLoad.current) {
         setProducts(staticProducts);
       }
     } catch (err) {
-      console.warn("Supabase fetch failed, using static data:", err.message);
-      setProducts(staticProducts);
-      setCategories(staticCategories);
+      console.warn("Supabase fetch failed:", err.message);
+      if (isFirstLoad.current) {
+        setProducts(staticProducts);
+        setCategories(staticCategories);
+      }
     } finally {
       setLoading(false);
+      isFirstLoad.current = false;
     }
   }, []);
 

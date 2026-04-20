@@ -25,7 +25,7 @@ export default function CategoryManager() {
     try {
       const { data, error } = await supabaseAdmin
         .from("categories")
-        .select("slug, name, description, products:products(count)")
+        .select("slug, name, description, icon, products:products(count)")
         .order("name");
       if (error) throw error;
       setCategories(data || []);
